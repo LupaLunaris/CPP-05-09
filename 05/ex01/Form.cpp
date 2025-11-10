@@ -6,17 +6,18 @@
 /*   By: Jpaulis <Jpaulis@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/27 17:14:20 by Jpaulis           #+#    #+#             */
-/*   Updated: 2025/10/22 17:34:51 by Jpaulis          ###   ########.fr       */
+/*   Updated: 2025/11/10 17:29:33 by Jpaulis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Form.hpp"
+#include "Bureaucrat.hpp"
 
-Form::Form() : _name("Default"), _signed(1), _gradeSign(150), _gradeExe(150) {
+Form::Form() : _name("Default"), _signed(false), _gradeSign(150), _gradeExe(150) {
 	std::cout << "Default constructor Form called" << std::endl;
 }
 
-Form::Form(const std::string &name, const int gradeSign, const int gradeExe) : _name(name), _signed (false), _gradeSign(gradeSign), _gradeExe(gradeExe) {
+Form::Form(const std::string &name, const int gradeSign, const int gradeExe) : _name(name), _signed(false), _gradeSign(gradeSign), _gradeExe(gradeExe) {
 	std::cout << "Constructor Form called for " << name << std::endl;
 	if (_gradeSign < 1 || _gradeExe < 1)
 		throw GradeTooHighException();
@@ -24,7 +25,7 @@ Form::Form(const std::string &name, const int gradeSign, const int gradeExe) : _
 		throw GradeTooLowException();
 }
 
-Form::Form(const Form &other) : _name(other._name), _gradeSign(other._gradeSign), _gradeExe(other._gradeExe) {
+Form::Form(const Form &other) : _name(other._name), _signed(other._signed), _gradeSign(other._gradeSign), _gradeExe(other._gradeExe) {
 	std::cout << "Copy constructor Form called" << std::endl;
 }
 
@@ -46,22 +47,22 @@ bool Form::isSigned() const {
 	return _signed;
 }
 
-const int Form::getGradeSign() const {
+int Form::getGradeSign() const {
 	return _gradeSign;
 }
 
-const int Form::getGradeExe() const {
+int Form::getGradeExe() const {
 	return _gradeExe;
 }
 
 void Form::beSigned(Bureaucrat &bureaucrat) {
-	if (bureaucrat.getGrade() <= _gradeSign)
-	{
-		_signed = true;
-		std::cout << bureaucrat.getName() << " signed " << getName() << std::endl;
-	}
-	else
-		std::cout << bureaucrat.getName() << "  couldn’t sign " << getName() << " because " << throw Form::GradeTooLowException() << std::endl;
+    if (_signed)
+        throw std::runtime_error("Form is already signed");
+    
+    if (bureaucrat.getGrade() > _gradeSign)
+        throw GradeTooLowException();
+    
+    _signed = true;
 }
 
 std::ostream &operator<<(std::ostream &out, const Form &Form) {

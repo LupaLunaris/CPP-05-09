@@ -6,7 +6,7 @@
 /*   By: Jpaulis <Jpaulis@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/27 17:14:11 by Jpaulis           #+#    #+#             */
-/*   Updated: 2025/10/22 17:34:45 by Jpaulis          ###   ########.fr       */
+/*   Updated: 2025/11/10 16:46:34 by Jpaulis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 
 #include <iostream>
 #include <string> 
-#include "Bureaucrat.hpp"
+
+class Bureaucrat;
 
 class Form {
 	private:
@@ -33,8 +34,8 @@ class Form {
 		
 		const std::string getName() const;
 		bool isSigned() const;
-		const int getGradeSign() const;
-		const int getGradeExe() const;
+		int getGradeSign() const;
+		int getGradeExe() const;
 		
 		class GradeTooHighException : public std::exception {
 			public:
