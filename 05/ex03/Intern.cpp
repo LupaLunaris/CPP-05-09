@@ -4,45 +4,54 @@
 #include "PresidentialPardonForm.hpp"
 #include <iostream>
 
-// Fonctions de création
-static AForm* createShrubberyForm(std::string target) {
-    return new ShrubberyCreationForm(target);
+static AForm* createShrubberyForm(std::string const &target) {
+	return new ShrubberyCreationForm(target);
 }
 
-static AForm* createRobotomyForm(std::string target) {
-    return new RobotomyRequestForm(target);
+static AForm* createRobotomyForm(std::string const &target) {
+	return new RobotomyRequestForm(target);
 }
 
-static AForm* createPresidentialForm(std::string target) {
-    return new PresidentialPardonForm(target);
+static AForm* createPresidentialForm(std::string const &target) {
+	return new PresidentialPardonForm(target);
 }
 
-// Array des créateurs
 const FormCreator Intern::_creators[] = {
-    {"shrubbery creation", createShrubberyForm},
-    {"robotomy request", createRobotomyForm}, 
-    {"presidential pardon", createPresidentialForm}
+	{"shrubbery creation", createShrubberyForm},
+	{"robotomy request", createRobotomyForm}, 
+	{"presidential pardon", createPresidentialForm}
 };
+
+Intern::Intern(Intern const & src) {
+	std::cout << "Copy constructor called for Intern" << std::endl;
+	*this = src;
+}
+
+Intern & Intern::operator=(Intern const & rhs) {
+	std::cout << "Assignment operator called for Intern" << std::endl;
+	(void)rhs;
+	return *this;
+}
+
 
 const int Intern::_nbCreators = 3;
 
-// Implémentations des méthodes
 Intern::Intern() {
-    std::cout << "Constructor called for Intern" << std::endl;
+	std::cout << "Constructor called for Intern" << std::endl;
 }
 
 Intern::~Intern() {
-    std::cout << "Destructor called for Intern" << std::endl;
+	std::cout << "Destructor called for Intern" << std::endl;
 }
 
-AForm* Intern::makeForm(std::string formName, std::string target) {
-    for (int i = 0; i < _nbCreators; i++) {
-        if (_creators[i].name == formName) {
-            std::cout << "Intern creates " << formName << std::endl;
-            return _creators[i].createFunction(target);
-        }
-    }
-    
-    std::cout << "Error: Unknown form name '" << formName << "'" << std::endl;
-    return NULL;
+AForm* Intern::makeForm(std::string const &formName, std::string const &target) {
+	for (int i = 0; i < _nbCreators; i++) {
+		if (_creators[i].name == formName) {
+			std::cout << "Intern creates " << formName << std::endl;
+			return _creators[i].createFunction(target);
+		}
+	}
+	
+	std::cout << "Error: Unknown form name '" << formName << "'" << std::endl;
+	return NULL;
 }

@@ -6,118 +6,97 @@
 /*   By: Jpaulis <Jpaulis@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/23 18:38:52 by Jpaulis           #+#    #+#             */
-/*   Updated: 2025/11/10 16:57:19 by Jpaulis          ###   ########.fr       */
+/*   Updated: 2025/12/31 16:16:36 by Jpaulis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Bureaucrat.hpp"
 
 int main() {
+	std::cout << "\n=== Welcome to Konoha ===\n" << std::endl;
+
+	// Valid bureaucrat
+	try {
+		Bureaucrat naruto("Naruto", 75);
+		std::cout << naruto << std::endl;
+	} catch (std::exception &e) {
+		std::cout << "Error: " << e.what() << std::endl;
+	}
+
+	// Too high grade
+	std::cout << "\n--- Trying grade 0 ---" << std::endl;
+	try {
+		Bureaucrat sasuke("Sasuke", 0);
+		std::cout << sasuke << std::endl;
+	} catch (std::exception &e) {
+		std::cout << "Caught: " << e.what() << std::endl;
+	}
+
+	// Too low grade
+	std::cout << "\n--- Trying grade 151 ---" << std::endl;
+	try {
+		Bureaucrat kiba("Kiba", 151);
+		std::cout << kiba << std::endl;
+	} catch (std::exception &e) {
+		std::cout << "Caught: " << e.what() << std::endl;
+	}
+
+	// Incrementing
+	std::cout << "\n--- Shikamaru gets promoted ---" << std::endl;
+	Bureaucrat shika("Shikamaru", 2);
+	std::cout << shika << std::endl;
+	shika.incrementGrade();
+	std::cout << shika << std::endl;
 	
-	std::cout << "=== Creating Konoha ===\n" << std::endl;
-	    // ========== TEST 1: Valid construction ==========
-    std::cout << "=== TEST 1: Valid construction ===\n";
-    try {
-        Bureaucrat naruto("Naruto", 75);
-        std::cout << naruto << std::endl;
-    } catch (std::exception &e) {
-        std::cout << "Error: " << e.what() << std::endl;
-    }
+	try {
+		shika.incrementGrade(); // should fail
+	} catch (std::exception &e) {
+		std::cout << "Can't increment: " << e.what() << std::endl;
+	}
 
-    // ========== TEST 2: Grade too high (< 1) ==========
-    std::cout << "\n=== TEST 2: Grade too high (0) ===\n";
-    try {
-        Bureaucrat sasuke("Sasuke", 0);
-        std::cout << sasuke << std::endl;  // Ne devrait jamais print
-    } catch (std::exception &e) {
-        std::cout << "✓ Exception caught: " << e.what() << std::endl;
-    }
+	// Decrementing
+	std::cout << "\n--- Lee gets demoted ---" << std::endl;
+	Bureaucrat lee("Rock Lee", 149);
+	std::cout << lee << std::endl;
+	lee.decrementGrade();
+	std::cout << lee << std::endl;
+	
+	try {
+		lee.decrementGrade(); // should fail
+	} catch (std::exception &e) {
+		std::cout << "Can't decrement: " << e.what() << std::endl;
+	}
 
-    // ========== TEST 3: Grade too low (> 150) ==========
-    std::cout << "\n=== TEST 3: Grade too low (151) ===\n";
-    try {
-        Bureaucrat kiba("Kiba", 151);
-        std::cout << kiba << std::endl;  // Ne devrait jamais print
-    } catch (std::exception &e) {
-        std::cout << "✓ Exception caught: " << e.what() << std::endl;
-    }
+	// Copy test
+	std::cout << "\n--- Testing copy ---" << std::endl;
+	Bureaucrat hinata("Hinata", 50);
+	Bureaucrat hinata_copy(hinata);
+	std::cout << "Original: " << hinata << std::endl;
+	std::cout << "Copy: " << hinata_copy << std::endl;
+	hinata_copy.incrementGrade();
+	std::cout << "After modifying copy:" << std::endl;
+	std::cout << "Original: " << hinata << std::endl;
+	std::cout << "Copy: " << hinata_copy << std::endl;
 
-    // ========== TEST 4: Increment normal ==========
-    std::cout << "\n=== TEST 4: Increment (2 -> 1) ===\n";
-    Bureaucrat shika("Shikamaru", 2);
-    std::cout << "Before: " << shika << std::endl;
-    shika.incrementGrade();
-    std::cout << "After:  " << shika << std::endl;
+	// Assignment test
+	std::cout << "\n--- Testing assignment ---" << std::endl;
+	Bureaucrat kakashi("Kakashi", 10);
+	Bureaucrat ino("Ino", 100);
+	std::cout << "Before: " << kakashi << " | " << ino << std::endl;
+	ino = kakashi;
+	std::cout << "After assignment: " << ino << std::endl;
 
-    // ========== TEST 5: Increment beyond limit ==========
-    std::cout << "\n=== TEST 5: Increment beyond limit (1 -> 0) ===\n";
-    try {
-        shika.incrementGrade();  // Devrait throw
-        std::cout << "ERROR: No exception thrown!" << std::endl;
-    } catch (std::exception &e) {
-        std::cout << "✓ Exception caught: " << e.what() << std::endl;
-    }
-    std::cout << "Grade after failed increment: " << shika << std::endl;
+	// Boundaries
+	std::cout << "\n--- Edge cases ---" << std::endl;
+	try {
+		Bureaucrat hokage("Hokage", 1);
+		Bureaucrat genin("Genin", 150);
+		std::cout << hokage << std::endl;
+		std::cout << genin << std::endl;
+	} catch (std::exception &e) {
+		std::cout << e.what() << std::endl;
+	}
 
-    // ========== TEST 6: Decrement normal ==========
-    std::cout << "\n=== TEST 6: Decrement (149 -> 150) ===\n";
-    Bureaucrat lee("Rock Lee", 149);
-    std::cout << "Before: " << lee << std::endl;
-    lee.decrementGrade();
-    std::cout << "After:  " << lee << std::endl;
-
-    // ========== TEST 7: Decrement beyond limit ==========
-    std::cout << "\n=== TEST 7: Decrement beyond limit (150 -> 151) ===\n";
-    try {
-        lee.decrementGrade();  // Devrait throw
-        std::cout << "ERROR: No exception thrown!" << std::endl;
-    } catch (std::exception &e) {
-        std::cout << "✓ Exception caught: " << e.what() << std::endl;
-    }
-    std::cout << "Grade after failed decrement: " << lee << std::endl;
-
-    // ========== TEST 8: Copy constructor ==========
-    std::cout << "\n=== TEST 8: Copy constructor ===\n";
-    Bureaucrat hinata("Hinata", 50);
-    Bureaucrat hinata_copy(hinata);
-    std::cout << "Original: " << hinata << std::endl;
-    std::cout << "Copy:     " << hinata_copy << std::endl;
-    
-    std::cout << "Modifying copy's grade...\n";
-    hinata_copy.incrementGrade();
-    std::cout << "Original: " << hinata << std::endl;
-    std::cout << "Copy:     " << hinata_copy << " (should be 49)" << std::endl;
-
-    // ========== TEST 9: Assignment operator ==========
-    std::cout << "\n=== TEST 9: Assignment operator ===\n";
-    Bureaucrat kakashi("Kakashi", 10);
-    Bureaucrat ino("Ino", 100);
-    std::cout << "Before assignment:\n";
-    std::cout << "  kakashi: " << kakashi << std::endl;
-    std::cout << "  ino:     " << ino << std::endl;
-    
-    ino = kakashi;
-    std::cout << "After ino = kakashi:\n";
-    std::cout << "  kakashi: " << kakashi << std::endl;
-    std::cout << "  ino:     " << ino << " (name unchanged, grade copied)" << std::endl;
-
-    // ========== TEST 10: Operator<< in different contexts ==========
-    std::cout << "\n=== TEST 10: Operator<< ===\n";
-    Bureaucrat sakura("Sakura", 42);
-    std::cout << "Direct: " << sakura << std::endl;
-    std::cout << "In sentence: Hello, " << sakura << "!" << std::endl;
-
-    // ========== TEST 11: Boundary values ==========
-    std::cout << "\n=== TEST 11: Boundary values ===\n";
-    try {
-        Bureaucrat min("MinGrade", 150);
-        Bureaucrat max("MaxGrade", 1);
-        std::cout << "✓ " << min << std::endl;
-        std::cout << "✓ " << max << std::endl;
-    } catch (std::exception &e) {
-        std::cout << "ERROR: " << e.what() << std::endl;
-    }
-	std::cout << "\n=== Bye Konoha ===\n"<< std::endl;
-
+	std::cout << "\n=== Goodbye from Konoha ===\n" << std::endl;
 	return 0;
 }

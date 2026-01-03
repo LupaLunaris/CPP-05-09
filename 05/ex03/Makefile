@@ -6,7 +6,7 @@
 #    By: Jpaulis <Jpaulis@student.s19.be>           +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/23 18:38:39 by Jpaulis           #+#    #+#              #
-#    Updated: 2025/11/10 15:28:10 by Jpaulis          ###   ########.fr        #
+#    Updated: 2026/01/02 17:04:02 by Jpaulis          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,6 +26,9 @@ clean:
 
 fclean: clean
 	rm -f $(NAME)
+
+fullclean: fclean
+	rm -f *_shrubbery
 
 re: fclean all
 

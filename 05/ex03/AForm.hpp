@@ -12,6 +12,9 @@ class AForm {
 		bool _signed;
 		const int _gradeSign;
 		const int _gradeExe;
+	
+	protected:
+			virtual void executeAction() const = 0;
 
 	public :
 		AForm();
@@ -27,21 +30,27 @@ class AForm {
 		
 		class GradeTooHighException : public std::exception {
 			public:
-    			const char* what() const throw() {
-					return "Grade too high!";
-				}
+				const char* what() const throw();
 		};
 		
 		class GradeTooLowException : public std::exception {
 			public:
-    			const char* what() const throw() {
-					return "Grade too low!";
-				}
+				const char* what() const throw();
 		};
 
+		class FormAlreadySignedException : public std::exception {
+			public:
+				const char* what() const throw();
+		};
+
+		class FormNotSignedException : public std::exception {
+    		public:
+        		const char* what() const throw();
+    };
+	
 		void beSigned(Bureaucrat &bureaucrat);
 
-		virtual void execute(Bureaucrat const & executor) const = 0;
+		void execute(Bureaucrat const &executor) const;
 } ;
 
 std::ostream &operator<<(std::ostream &out, const AForm &AForm);

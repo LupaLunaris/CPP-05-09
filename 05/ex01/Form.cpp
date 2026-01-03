@@ -6,7 +6,7 @@
 /*   By: Jpaulis <Jpaulis@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/27 17:14:20 by Jpaulis           #+#    #+#             */
-/*   Updated: 2025/11/10 17:29:33 by Jpaulis          ###   ########.fr       */
+/*   Updated: 2026/01/02 11:21:26 by Jpaulis          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ Form::~Form() {
 	std::cout << "Destructor Form called" << std::endl;
 }
 
-const std::string Form::getName() const {
+const std::string &Form::getName() const {
 	return _name;
 }
 
@@ -55,17 +55,30 @@ int Form::getGradeExe() const {
 	return _gradeExe;
 }
 
-void Form::beSigned(Bureaucrat &bureaucrat) {
-    if (_signed)
-        throw std::runtime_error("Form is already signed");
-    
-    if (bureaucrat.getGrade() > _gradeSign)
-        throw GradeTooLowException();
-    
-    _signed = true;
+const char* Form::GradeTooHighException::what() const throw() {
+	return "Grade too high!";
 }
 
-std::ostream &operator<<(std::ostream &out, const Form &Form) {
-	out << Form.getName() << ", form grade sign " << Form.getGradeSign() << ", form grade exe " << Form.getGradeExe() << ".";
+const char* Form::GradeTooLowException::what() const throw() {
+	return "Grade too low!";
+}
+
+const char* Form::FormAlreadySignedException::what() const throw() {
+	return "Form is already signed!";
+}
+
+void Form::beSigned(Bureaucrat &bureaucrat) {
+	if (_signed)
+		throw FormAlreadySignedException();
+	if (bureaucrat.getGrade() > _gradeSign)
+		throw GradeTooLowException();
+	_signed = true;
+}
+
+std::ostream &operator<<(std::ostream &out, const Form &form) {
+	out << "Form: " << form.getName()
+		<< " [sign grade: " << form.getGradeSign()
+		<< ", exec grade: " << form.getGradeExe()
+		<< ", signed: " << (form.isSigned() ? "yes" : "no") << "]";
 	return out;
 }
