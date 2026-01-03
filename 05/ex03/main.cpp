@@ -13,7 +13,16 @@ int main() {
 	AForm* form3 = intern.makeForm("presidential pardon", "Arthur");
 	
 	std::cout << "\n=== Invalid Form ===" << std::endl;
-	
+
+	AForm* form4 = intern.makeForm("invalid form name", "Target");
+
+	if (!form4) {
+		std::cout << "Form creation failed as expected" << std::endl;
+	} else {
+		std::cout << "ERROR: Form should not have been created!" << std::endl;
+		delete form4;
+	}
+
 	std::cout << "\n=== Testing a form ===" << std::endl;
 	
 	if (form1) {

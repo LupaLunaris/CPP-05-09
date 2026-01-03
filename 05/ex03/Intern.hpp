@@ -12,15 +12,15 @@ struct FormCreator {
 class Intern {
 public:
 	Intern();
-	Intern(Intern const & src);
-	Intern & operator=(Intern const & rhs);
+	Intern(Intern const &src);
+	Intern & operator=(Intern const &src);
 	~Intern();
 	
 	AForm* makeForm(std::string const &formName, std::string const &target);
 
 private:
 	static const FormCreator _creators[];
-	static const int _nbCreators;
+	//static const int _nbCreators;
 };
 
 #endif

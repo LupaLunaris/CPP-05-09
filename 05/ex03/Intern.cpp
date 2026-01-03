@@ -22,19 +22,18 @@ const FormCreator Intern::_creators[] = {
 	{"presidential pardon", createPresidentialForm}
 };
 
-Intern::Intern(Intern const & src) {
+Intern::Intern(Intern const &src) {
 	std::cout << "Copy constructor called for Intern" << std::endl;
 	*this = src;
 }
 
-Intern & Intern::operator=(Intern const & rhs) {
+Intern& Intern::operator=(Intern const &src) {
 	std::cout << "Assignment operator called for Intern" << std::endl;
-	(void)rhs;
+	(void)src;
 	return *this;
 }
 
-
-const int Intern::_nbCreators = 3;
+//const int Intern::_nbCreators = 3;
 
 Intern::Intern() {
 	std::cout << "Constructor called for Intern" << std::endl;
@@ -45,7 +44,7 @@ Intern::~Intern() {
 }
 
 AForm* Intern::makeForm(std::string const &formName, std::string const &target) {
-	for (int i = 0; i < _nbCreators; i++) {
+	for (int i = 0; i < 3; i++) {
 		if (_creators[i].name == formName) {
 			std::cout << "Intern creates " << formName << std::endl;
 			return _creators[i].createFunction(target);
