@@ -1,42 +1,47 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ScalarConverter.hpp                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: Jpaulis <Jpaulis@student.s19.be>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/01/05 14:11:07 by Jpaulis           #+#    #+#             */
+/*   Updated: 2026/01/05 14:42:04 by Jpaulis          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef SCALARCONVERTER_HPP
 #define SCALARCONVERTER_HPP
 
-#include <string>
 #include <iostream>
-#include <iomanip>
-#include <sstream>
+#include <string>
 #include <cmath>
-#include <climits>
-#include <cerrno>
+#include <iomanip>
 #include <cstdlib>
+#include <cerrno>
+#include <cctype>
+#include <climits>
 
 class ScalarConverter {
-private:
-    // OCF (privé car classe statique)
-    ScalarConverter();
-    ScalarConverter(const ScalarConverter& other);
-    ScalarConverter& operator=(const ScalarConverter& other);
-    ~ScalarConverter();
+	private:
+		ScalarConverter();
+		ScalarConverter(const ScalarConverter& other);
+		ScalarConverter& operator=(const ScalarConverter& other);
+		~ScalarConverter();
 
-    // Détection de type
-    static bool isPseudoLiteral(const std::string& literal);
-    static bool isChar(const std::string& literal);
-    static bool isValidNumber(const std::string& literal);
+		static bool isPseudoLiteral(const std::string& literal);
+		static bool isChar(const std::string& literal);
+		static bool isValidNumber(const std::string& literal);
+		static double parseValue(const std::string& literal);
+		
+		static void printChar(double value);
+		static void printInt(double value);
+		static void printFloat(double value);
+		static void printDouble(double value);
+		static void handlePseudoLiteral(const std::string& literal);
 
-    // Parsing sécurisé C++98
-    static double parseValue(const std::string& literal);
-
-    // Conversions avec exceptions
-    static void printChar(double value);
-    static void printInt(double value);
-    static void printFloat(double value);
-    static void printDouble(double value);
-
-    // Cas spéciaux
-    static void handlePseudoLiteral(const std::string& literal);
-
-public:
-    static void convert(const std::string& literal);
+	public:
+		static void convert(const std::string& literal);
 };
 
 #endif
