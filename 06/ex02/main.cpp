@@ -5,13 +5,14 @@
 
 int main(void)
 {
-	//std::srand(std::time(NULL));
+	std::srand(std::time(NULL));
 	std::cout << "== Test aleatoire ==" << std::endl;
 	for (int i = 0; i < 5; i++)
 	{
 		Base* obj = generate();
-		std::cout << "Object " << i + 1 << ": ";
+		std::cout << "Object " << i + 1 << ": \n";
 		identify(obj);
+		identify(*obj);
 		delete obj;
 	}
 

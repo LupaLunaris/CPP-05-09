@@ -7,11 +7,6 @@
 Base::~Base() {}
 
 Base* generate(void) {
-	static bool init = false;
-	if (!init) {
-		std::srand(std::time(NULL));
-		init = true;
-	}
 	int random = std::rand() % 3;
 	if (random == 0)
 		return new A();
