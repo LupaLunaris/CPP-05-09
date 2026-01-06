@@ -1,74 +1,40 @@
-#include <iostream>
+
 #include "Serializer.hpp"
 #include "Data.hpp"
 
-int main() {
-    // ===== TEST 1 : Sérialisation/Désérialisation simple =====
-    std::cout << "===== Test 1 : Basic Serialization =====" << std::endl;
-    
-    Data original;
-    original.id = 42;
-    original.name = "Test Data";
-    original.value = 3.14;
+int main()
+{
+	Data original;
+	original.id = 42;
+	original.name = "test string";
+	original.value = 12.345;
+	std::cout << "\nOrignal address: " << &original << std::endl;
+	std::cout << "Data content: " << original.id << " | " << original.name << " | " << original.value << std::endl;
+	uintptr_t serialized = Serializer::serialize(&original);
+	std::cout << "Serialized value: " << serialized << std::endl;
+	Data* ptr = Serializer::deserialize(serialized);
+	std::cout << "Deserialized adress: " << ptr << std::endl;
+	if (ptr == &original)
+		std::cout << "Sucess: same pointer" << std::endl;
+	else
+		std::cout << "Error: differnt pointers" << std::endl;
+	std::cout << "Acess data trough pointer: " << ptr->id << " | " << ptr->name << " | " << ptr->value << std::endl;
 
-    std::cout << "Original pointer: " << &original << std::endl;
-    std::cout << "Original data: id=" << original.id 
-              << ", name=" << original.name 
-              << ", value=" << original.value << std::endl;
-
-    // Sérialisation (pointeur → entier)
-    uintptr_t raw = Serializer::serialize(&original);
-    std::cout << "Serialized (uintptr_t): " << raw << std::endl;
-
-    // Désérialisation (entier → pointeur)
-    Data* deserialized = Serializer::deserialize(raw);
-    std::cout << "Deserialized pointer: " << deserialized << std::endl;
-
-    // Vérification de l'égalité des pointeurs
-    if (deserialized == &original) {
-        std::cout << "✅ SUCCESS: Pointers are equal!" << std::endl;
-    } else {
-        std::cout << "❌ FAIL: Pointers are different!" << std::endl;
-    }
-
-    // Vérification de l'accès aux données
-    std::cout << "Deserialized data: id=" << deserialized->id 
-              << ", name=" << deserialized->name 
-              << ", value=" << deserialized->value << std::endl;
-
-    std::cout << std::endl;
-
-    // ===== TEST 2 : Avec allocation dynamique =====
-    std::cout << "===== Test 2 : Dynamic Allocation =====" << std::endl;
-    
-    Data* dynamicData = new Data();
-    dynamicData->id = 100;
-    dynamicData->name = "Dynamic";
-    dynamicData->value = 2.71;
-
-    std::cout << "Dynamic pointer: " << dynamicData << std::endl;
-
-    uintptr_t raw2 = Serializer::serialize(dynamicData);
-    Data* deserialized2 = Serializer::deserialize(raw2);
-
-    if (deserialized2 == dynamicData) {
-        std::cout << "✅ SUCCESS: Dynamic pointers are equal!" << std::endl;
-    } else {
-        std::cout << "❌ FAIL: Dynamic pointers are different!" << std::endl;
-    }
-
-    std::cout << "Deserialized data: id=" << deserialized2->id 
-              << ", name=" << deserialized2->name 
-              << ", value=" << deserialized2->value << std::endl;
-
-    delete dynamicData;
-
-    std::cout << std::endl;
-
-    // ===== TEST 3 : Tentative d'instanciation (doit échouer) =====
-    std::cout << "===== Test 3 : Non-Instantiable Class =====" << std::endl;
-     //Serializer s;  // ❌ Erreur de compilation
-    std::cout << "✅ Class is non-instantiable (compile-time check)" << std::endl;
-
-    return 0;
+	Data* heap_data = new Data;
+	heap_data->id = 99;
+	heap_data->name = "heap test";
+	heap_data->value = 2.71;
+	std::cout << "\nHeap address: " << heap_data << std::endl;
+	std::cout << "Data content: " << heap_data->id << " | " << heap_data->name << " | " << heap_data->value << std::endl;
+	uintptr_t heapserial = Serializer::serialize(heap_data);
+	std::cout << "Serialized value: " << heapserial << std::endl;
+	Data* back = Serializer::deserialize(heapserial);
+	std::cout << "Deserialized adress: " << back << std::endl;
+	if (back == heap_data)
+		std::cout << "Heap test: ok" << std::endl;
+	else
+		std::cout << "Heap test: fail" << std::endl;
+	std::cout << "Acess data trough pointer: " << back->id << " | " << back->name << " | " << back->value << std::endl;
+	delete heap_data;
+	return 0;
 }
