@@ -2,6 +2,8 @@
 #define ARRAY_HPP
 
 #include <iostream>
+#include <cstdlib>
+#include <ctime>
 
 template <typename T>
 class Array {
@@ -15,7 +17,7 @@ class Array {
 		~Array();
 		Array& operator=(const Array& other);
 		T& operator[](unsigned int index);
-    	const T& operator[](unsigned int index) const;
+		const T& operator[](unsigned int index) const;
 		unsigned int size() const;
 };
 
