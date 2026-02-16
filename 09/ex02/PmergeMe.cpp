@@ -115,9 +115,10 @@ void PmergeMe::sortVectorFordJohnson(std::vector<int>& v)
 		return;
 	}
 	
-	// Step 1: Create pairs and sort them
+	// Step 1: Create pairs with indices and sort them
 	typedef std::pair<int, int> IntPair;
 	std::vector<IntPair> pairs;
+	std::vector<size_t> pairIndices; // Track original indices
 	bool hasStraggler = (n % 2 == 1);
 	int straggler = hasStraggler ? v[n - 1] : 0;
 	
@@ -130,6 +131,7 @@ void PmergeMe::sortVectorFordJohnson(std::vector<int>& v)
 			pairs.push_back(std::make_pair(a, b));
 		else
 			pairs.push_back(std::make_pair(b, a));
+		pairIndices.push_back(i);
 	}
 	
 	// Step 2: Recursively sort based on larger elements
@@ -139,16 +141,17 @@ void PmergeMe::sortVectorFordJohnson(std::vector<int>& v)
 	
 	sortVectorFordJohnson(larger);
 	
-	// Rearrange pairs based on sorted larger elements
+	// Rearrange pairs and indices based on sorted larger elements using boolean tracking
 	std::vector<IntPair> sortedPairs;
+	std::vector<bool> used(pairs.size(), false);
 	for (size_t i = 0; i < larger.size(); ++i)
 	{
 		for (size_t j = 0; j < pairs.size(); ++j)
 		{
-			if (pairs[j].first == larger[i])
+			if (!used[j] && pairs[j].first == larger[i])
 			{
 				sortedPairs.push_back(pairs[j]);
-				pairs[j].first = -1; // Mark as used
+				used[j] = true;
 				break;
 			}
 		}
@@ -206,9 +209,10 @@ void PmergeMe::sortDequeFordJohnson(std::deque<int>& d)
 		return;
 	}
 	
-	// Step 1: Create pairs and sort them
+	// Step 1: Create pairs with indices and sort them
 	typedef std::pair<int, int> IntPair;
 	std::vector<IntPair> pairs;
+	std::vector<size_t> pairIndices; // Track original indices
 	bool hasStraggler = (n % 2 == 1);
 	int straggler = hasStraggler ? d[n - 1] : 0;
 	
@@ -221,6 +225,7 @@ void PmergeMe::sortDequeFordJohnson(std::deque<int>& d)
 			pairs.push_back(std::make_pair(a, b));
 		else
 			pairs.push_back(std::make_pair(b, a));
+		pairIndices.push_back(i);
 	}
 	
 	// Step 2: Recursively sort based on larger elements
@@ -230,16 +235,17 @@ void PmergeMe::sortDequeFordJohnson(std::deque<int>& d)
 	
 	sortDequeFordJohnson(larger);
 	
-	// Rearrange pairs based on sorted larger elements
+	// Rearrange pairs and indices based on sorted larger elements using boolean tracking
 	std::vector<IntPair> sortedPairs;
+	std::vector<bool> used(pairs.size(), false);
 	for (size_t i = 0; i < larger.size(); ++i)
 	{
 		for (size_t j = 0; j < pairs.size(); ++j)
 		{
-			if (pairs[j].first == larger[i])
+			if (!used[j] && pairs[j].first == larger[i])
 			{
 				sortedPairs.push_back(pairs[j]);
-				pairs[j].first = -1; // Mark as used
+				used[j] = true;
 				break;
 			}
 		}
