@@ -1,10 +1,10 @@
-NAME		= easyfind
+NAME		= RPN
 CXX			= c++
-CXXFLAGS    = -Wall -Wextra -Werror -std=c++98
+CXXFLAGS	= -Wall -Wextra -Werror -std=c++98
 
-SRCS        = main.cpp
-OBJS        = $(SRCS:.cpp=.o)
-HEADERS     = easyfind.hpp
+SRCS		= main.cpp RPN.cpp
+OBJS		= $(SRCS:.cpp=.o)
+HEADERS		= RPN.hpp
 
 all: $(NAME)
 
