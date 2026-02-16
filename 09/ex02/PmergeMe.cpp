@@ -84,16 +84,186 @@ void PmergeMe::printAfter(const std::vector<int>& sorted) const
 	std::cout << std::endl;
 }
 
+// Binary search insertion for vector
+static void binaryInsertVector(std::vector<int>& sorted, int value)
+{
+	size_t left = 0;
+	size_t right = sorted.size();
+	
+	while (left < right)
+	{
+		size_t mid = left + (right - left) / 2;
+		if (sorted[mid] < value)
+			left = mid + 1;
+		else
+			right = mid;
+	}
+	sorted.insert(sorted.begin() + left, value);
+}
+
 void PmergeMe::sortVectorFordJohnson(std::vector<int>& v)
 {
+	size_t n = v.size();
+	if (n <= 1)
+		return;
+	
+	// For small arrays, use simple sorting
+	if (n == 2)
+	{
+		if (v[0] > v[1])
+			std::swap(v[0], v[1]);
+		return;
+	}
+	
+	// Step 1: Create pairs and sort them
+	typedef std::pair<int, int> IntPair;
+	std::vector<IntPair> pairs;
+	bool hasStraggler = (n % 2 == 1);
+	int straggler = hasStraggler ? v[n - 1] : 0;
+	
+	size_t pairCount = n / 2;
+	for (size_t i = 0; i < pairCount; ++i)
+	{
+		int a = v[2 * i];
+		int b = v[2 * i + 1];
+		if (a > b)
+			pairs.push_back(std::make_pair(a, b));
+		else
+			pairs.push_back(std::make_pair(b, a));
+	}
+	
+	// Step 2: Recursively sort based on larger elements
+	std::vector<int> larger;
+	for (size_t i = 0; i < pairs.size(); ++i)
+		larger.push_back(pairs[i].first);
+	
+	sortVectorFordJohnson(larger);
+	
+	// Rearrange pairs based on sorted larger elements
+	std::vector<IntPair> sortedPairs;
+	for (size_t i = 0; i < larger.size(); ++i)
+	{
+		for (size_t j = 0; j < pairs.size(); ++j)
+		{
+			if (pairs[j].first == larger[i])
+			{
+				sortedPairs.push_back(pairs[j]);
+				pairs[j].first = -1; // Mark as used
+				break;
+			}
+		}
+	}
+	
+	// Step 3: Build main chain starting with first small element, then all larger elements
+	std::vector<int> result;
+	result.push_back(sortedPairs[0].second);
+	for (size_t i = 0; i < sortedPairs.size(); ++i)
+		result.push_back(sortedPairs[i].first);
+	
+	// Step 4: Insert remaining smaller elements using binary insertion
+	for (size_t i = 1; i < sortedPairs.size(); ++i)
+	{
+		binaryInsertVector(result, sortedPairs[i].second);
+	}
+	
+	// Step 5: Insert straggler if exists
+	if (hasStraggler)
+	{
+		binaryInsertVector(result, straggler);
+	}
+	
+	v = result;
+}
 
-	std::sort(v.begin(), v.end());
+// Binary search insertion for deque
+static void binaryInsertDeque(std::deque<int>& sorted, int value)
+{
+	size_t left = 0;
+	size_t right = sorted.size();
+	
+	while (left < right)
+	{
+		size_t mid = left + (right - left) / 2;
+		if (sorted[mid] < value)
+			left = mid + 1;
+		else
+			right = mid;
+	}
+	sorted.insert(sorted.begin() + left, value);
 }
 
 void PmergeMe::sortDequeFordJohnson(std::deque<int>& d)
 {
-
-	std::sort(d.begin(), d.end());
+	size_t n = d.size();
+	if (n <= 1)
+		return;
+	
+	// For small arrays, use simple sorting
+	if (n == 2)
+	{
+		if (d[0] > d[1])
+			std::swap(d[0], d[1]);
+		return;
+	}
+	
+	// Step 1: Create pairs and sort them
+	typedef std::pair<int, int> IntPair;
+	std::vector<IntPair> pairs;
+	bool hasStraggler = (n % 2 == 1);
+	int straggler = hasStraggler ? d[n - 1] : 0;
+	
+	size_t pairCount = n / 2;
+	for (size_t i = 0; i < pairCount; ++i)
+	{
+		int a = d[2 * i];
+		int b = d[2 * i + 1];
+		if (a > b)
+			pairs.push_back(std::make_pair(a, b));
+		else
+			pairs.push_back(std::make_pair(b, a));
+	}
+	
+	// Step 2: Recursively sort based on larger elements
+	std::deque<int> larger;
+	for (size_t i = 0; i < pairs.size(); ++i)
+		larger.push_back(pairs[i].first);
+	
+	sortDequeFordJohnson(larger);
+	
+	// Rearrange pairs based on sorted larger elements
+	std::vector<IntPair> sortedPairs;
+	for (size_t i = 0; i < larger.size(); ++i)
+	{
+		for (size_t j = 0; j < pairs.size(); ++j)
+		{
+			if (pairs[j].first == larger[i])
+			{
+				sortedPairs.push_back(pairs[j]);
+				pairs[j].first = -1; // Mark as used
+				break;
+			}
+		}
+	}
+	
+	// Step 3: Build main chain starting with first small element, then all larger elements
+	std::deque<int> result;
+	result.push_back(sortedPairs[0].second);
+	for (size_t i = 0; i < sortedPairs.size(); ++i)
+		result.push_back(sortedPairs[i].first);
+	
+	// Step 4: Insert remaining smaller elements using binary insertion
+	for (size_t i = 1; i < sortedPairs.size(); ++i)
+	{
+		binaryInsertDeque(result, sortedPairs[i].second);
+	}
+	
+	// Step 5: Insert straggler if exists
+	if (hasStraggler)
+	{
+		binaryInsertDeque(result, straggler);
+	}
+	
+	d = result;
 }
 
 void PmergeMe::run(int argc, char** argv)
