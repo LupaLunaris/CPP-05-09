@@ -23,7 +23,7 @@ int main() {
 	lst.push_back(20);
 	
 	try {
-		std::list<int>::iterator it = easyfind(lst, 10);
+		std::list<int>::iterator it = easyfind(lst, 11);
 		std::cout << "Trouvé : " << *it << std::endl;
 	} catch (const std::exception& e) {
 		std::cout << "Pas trouvé" << std::endl;

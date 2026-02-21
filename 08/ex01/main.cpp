@@ -15,8 +15,8 @@ static void testSubjectExample() {
 	sp.addNumber(9);
 	sp.addNumber(11);
 
-	std::cout << sp.shortestSpan() << std::endl; // expected 2
-	std::cout << sp.longestSpan() << std::endl;  // expected 14
+	std::cout << sp.shortestSpan() << std::endl; // 2
+	std::cout << sp.longestSpan() << std::endl;  // 14
 }
 
 static void testExceptions() {
@@ -27,7 +27,7 @@ static void testExceptions() {
 		Span sp(2);
 		sp.addNumber(1);
 		sp.addNumber(2);
-		sp.addNumber(3); // should throw
+		sp.addNumber(3); // throw
 		std::cout << "ERROR: expected FullException" << std::endl;
 	} catch (const std::exception& e) {
 		std::cout << "Caught: " << e.what() << std::endl;
@@ -37,7 +37,7 @@ static void testExceptions() {
 	try {
 		Span sp(10);
 		sp.addNumber(42);
-		std::cout << sp.shortestSpan() << std::endl; // should throw
+		std::cout << sp.shortestSpan() << std::endl; // throw
 		std::cout << "ERROR: expected NotEnoughException" << std::endl;
 	} catch (const std::exception& e) {
 		std::cout << "Caught: " << e.what() << std::endl;
@@ -53,20 +53,20 @@ static void testRangeAdd() {
 	v.push_back(20);
 	v.push_back(30);
 
-	sp.addNumber(v.begin(), v.end()); // adds 3 numbers
+	sp.addNumber(v.begin(), v.end()); // add 3 numbers
 
 	std::cout << "shortest: " << sp.shortestSpan() << std::endl; // 10
 	std::cout << "longest : " << sp.longestSpan() << std::endl;  // 20
 
-	// test range overflow (should throw before inserting anything)
+	// throw
 	try {
 		std::list<int> lst;
 		lst.push_back(1);
 		lst.push_back(2);
 		lst.push_back(3);
 
-		sp.addNumber(lst.begin(), lst.end()); // would exceed capacity (already has 3, adding 3 -> 6 > 5)
-		std::cout << "ERROR: expected FullException on range overflow" << std::endl;
+		sp.addNumber(lst.begin(), lst.end()); // throw
+		std::cout << "ERROR: expected FullException" << std::endl;
 	} catch (const std::exception& e) {
 		std::cout << "Caught: " << e.what() << std::endl;
 	}

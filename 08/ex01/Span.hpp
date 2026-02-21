@@ -17,8 +17,8 @@ class Span {
 
 		void addNumber(int x);
 
-		template <typename InputIt>
-		void addNumber(InputIt first, InputIt last) {
+		template <typename t>
+		void addNumber(t first, t last) {
 			unsigned int count = std::distance(first, last);
 			if (_v.size() + count > _max)
 				throw FullException();

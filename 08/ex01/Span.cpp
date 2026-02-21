@@ -1,7 +1,7 @@
 #include "Span.hpp"
 
 Span::Span(unsigned int n) : _max(n), _v() {
-    _v.reserve(n);
+	_v.reserve(n);
 }
 
 Span::Span(const Span& other) : _max(other._max), _v(other._v) {}
@@ -17,18 +17,18 @@ Span& Span::operator=(const Span& other) {
 Span::~Span() {}
 
 void Span::addNumber(int x) {
-    if (_v.size() >= _max)
-        throw FullException();
-    _v.push_back(x);
+	if (_v.size() >= _max)
+		throw FullException();
+	_v.push_back(x);
 }
 
 int Span::longestSpan() const {
-    if (_v.size() < 2)
-        throw FullException();
+	if (_v.size() < 2)
+		throw NotEnoughException();
 
-    std::vector<int>::const_iterator minIt = std::min_element(_v.begin(), _v.end());
-    std::vector<int>::const_iterator maxIt = std::max_element(_v.begin(), _v.end());
-    return *maxIt - *minIt;
+	std::vector<int>::const_iterator minIt = std::min_element(_v.begin(), _v.end());
+	std::vector<int>::const_iterator maxIt = std::max_element(_v.begin(), _v.end());
+	return *maxIt - *minIt;
 }
 
 int Span::shortestSpan() const {
@@ -46,9 +46,9 @@ int Span::shortestSpan() const {
 }
 
 const char* Span::FullException::what() const throw() {
-    return "Span is full";
+	return "Span is full";
 }
 
 const char* Span::NotEnoughException::what() const throw() {
-    return "Not enough numbers to find a span";
+	return "Not enough numbers to find a span";
 }
