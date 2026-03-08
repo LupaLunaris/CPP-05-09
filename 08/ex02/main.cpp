@@ -24,7 +24,7 @@ static void testSubject() {
 	MutantStack<int>::iterator ite = mstack.end();
 
 	++it;
-	--it;
+	//--it;
 
 	while (it != ite) {
 		std::cout << *it << std::endl;

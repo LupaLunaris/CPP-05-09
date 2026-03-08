@@ -3,8 +3,7 @@
 
 # include <string>
 
-class RPN
-{
+class RPN {
 public:
 	RPN();
 	RPN(const RPN& other);

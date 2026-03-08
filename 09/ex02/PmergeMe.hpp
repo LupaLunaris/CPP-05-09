@@ -13,15 +13,13 @@ public:
 	PmergeMe& operator=(const PmergeMe& other);
 	~PmergeMe();
 
-	void run(int argc, char** argv);
+	bool run(int argc, char** argv);
 
 private:
-	std::vector<int> _vec;
-	std::deque<int>  _deq;
+	static void parseArgsToVector(int argc, char** argv, std::vector<int>& out);
+	static void parseArgsToDeque(int argc, char** argv, std::deque<int>& out);
 
-	void parseArgs(int argc, char** argv);
-
-	void printBefore() const;
+	void printBefore(const std::vector<int>& unsorted) const;
 	void printAfter(const std::vector<int>& sorted) const;
 
 	void sortVectorFordJohnson(std::vector<int>& v);

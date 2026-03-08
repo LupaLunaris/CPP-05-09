@@ -5,6 +5,7 @@
 #include <sstream>
 #include <cstdlib>
 #include <stdexcept>
+#include <cctype>
 
 BitcoinExchange::BitcoinExchange() {}
 
@@ -32,6 +33,13 @@ static std::string trim(const std::string& s)
 	return s.substr(start, end - start);
 }
 
+static bool isLeapYear(int year)
+{
+	if (year % 400 == 0) return true;
+	if (year % 100 == 0) return false;
+	return (year % 4 == 0);
+}
+
 bool isValidDateFormat(const std::string& date)
 {
 	if (date.size() != 10) return false;
@@ -43,11 +51,20 @@ bool isValidDateFormat(const std::string& date)
 		if (!std::isdigit(date[i])) return false;
 	}
 
+	int year  = std::atoi(date.substr(0, 4).c_str());
 	int month = std::atoi(date.substr(5, 2).c_str());
 	int day   = std::atoi(date.substr(8, 2).c_str());
 
 	if (month < 1 || month > 12) return false;
-	if (day < 1 || day > 31) return false;
+	if (day < 1) return false;
+
+	int maxDay = 31;
+	if (month == 4 || month == 6 || month == 9 || month == 11)
+		maxDay = 30;
+	else if (month == 2)
+		maxDay = isLeapYear(year) ? 29 : 28;
+
+	if (day > maxDay) return false;
 
 	return true;
 }

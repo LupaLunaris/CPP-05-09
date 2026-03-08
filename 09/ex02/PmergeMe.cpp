@@ -11,12 +11,9 @@
 #include <utility>
 
 PmergeMe::PmergeMe() {}
-PmergeMe::PmergeMe(const PmergeMe& other) : _vec(other._vec), _deq(other._deq) {}
+PmergeMe::PmergeMe(const PmergeMe& other) { (void)other; }
 PmergeMe& PmergeMe::operator=(const PmergeMe& other) {
-	if (this != &other) {
-		_vec = other._vec;
-		_deq = other._deq;
-	}
+	(void)other;
 	return *this;
 }
 PmergeMe::~PmergeMe() {}
@@ -31,10 +28,9 @@ bool PmergeMe::isStrictPositiveInt(const std::string& s)
 	return true;
 }
 
-void PmergeMe::parseArgs(int argc, char** argv)
+void PmergeMe::parseArgsToVector(int argc, char** argv, std::vector<int>& out)
 {
-	_vec.clear();
-	_deq.clear();
+	out.clear();
 
 	if (argc < 2)
 		throw std::runtime_error("Error");
@@ -52,16 +48,39 @@ void PmergeMe::parseArgs(int argc, char** argv)
 		if (v <= 0 || v > INT_MAX)
 			throw std::runtime_error("Error");
 
-		_vec.push_back(static_cast<int>(v));
-		_deq.push_back(static_cast<int>(v));
+		out.push_back(static_cast<int>(v));
 	}
 }
 
-void PmergeMe::printBefore() const
+void PmergeMe::parseArgsToDeque(int argc, char** argv, std::deque<int>& out)
+{
+	out.clear();
+
+	if (argc < 2)
+		throw std::runtime_error("Error");
+
+	for (int i = 1; i < argc; ++i)
+	{
+		std::string t(argv[i]);
+		if (!isStrictPositiveInt(t))
+			throw std::runtime_error("Error");
+
+		char* end = 0;
+		long v = std::strtol(t.c_str(), &end, 10);
+		if (!end || *end != '\0')
+			throw std::runtime_error("Error");
+		if (v <= 0 || v > INT_MAX)
+			throw std::runtime_error("Error");
+
+		out.push_back(static_cast<int>(v));
+	}
+}
+
+void PmergeMe::printBefore(const std::vector<int>& unsorted) const
 {
 	std::cout << "Before: ";
-	for (size_t i = 0; i < _vec.size(); ++i) {
-		std::cout << _vec[i] << (i + 1 < _vec.size() ? " " : "");
+	for (size_t i = 0; i < unsorted.size(); ++i) {
+		std::cout << unsorted[i] << (i + 1 < unsorted.size() ? " " : "");
 	}
 	std::cout << std::endl;
 }
@@ -244,21 +263,24 @@ void PmergeMe::sortDequeFordJohnson(std::deque<int>& d)
 	d = mainChain;
 }
 
-void PmergeMe::run(int argc, char** argv)
+bool PmergeMe::run(int argc, char** argv)
 {
 	try
 	{
-		parseArgs(argc, argv);
-		printBefore();
+		std::vector<int> unsorted;
+		parseArgsToVector(argc, argv, unsorted);
+		printBefore(unsorted);
 
-		std::vector<int> v = _vec;
-		std::deque<int>  d = _deq;
+		std::vector<int> v;
+		std::deque<int> d;
 
 		clock_t startV = clock();
+		parseArgsToVector(argc, argv, v);
 		sortVectorFordJohnson(v);
 		clock_t endV = clock();
 
 		clock_t startD = clock();
+		parseArgsToDeque(argc, argv, d);
 		sortDequeFordJohnson(d);
 		clock_t endD = clock();
 
@@ -267,16 +289,18 @@ void PmergeMe::run(int argc, char** argv)
 		double timeV = (double)(endV - startV) / CLOCKS_PER_SEC * 1000000.0;
 		double timeD = (double)(endD - startD) / CLOCKS_PER_SEC * 1000000.0;
 
-		std::cout << "Time to process a range of " << _vec.size()
+		std::cout << "Time to process a range of " << v.size()
 				  << " elements with std::vector : "
 				  << std::fixed << std::setprecision(5) << timeV << " us" << std::endl;
 
-		std::cout << "Time to process a range of " << _deq.size()
+		std::cout << "Time to process a range of " << d.size()
 				  << " elements with std::deque : "
 				  << std::fixed << std::setprecision(5) << timeD << " us" << std::endl;
+		return true;
 	}
 	catch (...)
 	{
 		std::cerr << "Error" << std::endl;
+		return false;
 	}
 }

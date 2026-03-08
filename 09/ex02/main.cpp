@@ -3,6 +3,7 @@
 int main(int argc, char** argv)
 {
     PmergeMe pm;
-    pm.run(argc, argv);
+    if (!pm.run(argc, argv))
+        return 1;
     return 0;
 }
