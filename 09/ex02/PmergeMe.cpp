@@ -96,34 +96,34 @@ void PmergeMe::printAfter(const std::vector<int>& sorted) const
 
 static void buildJacobsthalOrderVector(size_t k, std::vector<size_t>& order)
 {
-    order.clear();
-    if (k == 0) return;
+	order.clear();
+	if (k == 0) return;
 
-    std::vector<size_t> js;
-    size_t a = 0;
-    size_t b = 1;
-    js.push_back(1);
+	std::vector<size_t> js;
+	size_t a = 0;
+	size_t b = 1;
+	js.push_back(1);
 
-    while (true)
-    {
-        size_t c = b + 2 * a;
-        a = b;
-        b = c;
-        if (b > k) break;
-        if (js.back() != b)
-            js.push_back(b);
-    }
+	while (true)
+	{
+		size_t c = b + 2 * a;
+		a = b;
+		b = c;
+		if (b > k) break;
+		if (js.back() != b)
+			js.push_back(b);
+	}
 
-    size_t last = 0;
-    for (size_t i = 0; i < js.size(); ++i)
-    {
-        size_t j = js[i];
-        for (size_t idx = j; idx > last; --idx)
-            order.push_back(idx - 1); // 0-based
-        last = j;
-    }
-    for (size_t idx = k; idx > last; --idx)
-        order.push_back(idx - 1);
+	size_t last = 0;
+	for (size_t i = 0; i < js.size(); ++i)
+	{
+		size_t j = js[i];
+		for (size_t idx = j; idx > last; --idx)
+			order.push_back(idx - 1);
+		last = j;
+	}
+	for (size_t idx = k; idx > last; --idx)
+		order.push_back(idx - 1);
 }
 
 static void buildJacobsthalOrderDeque(size_t k, std::deque<size_t>& order)
@@ -139,7 +139,7 @@ static void buildJacobsthalOrderDeque(size_t k, std::deque<size_t>& order)
 		j0 = j1;
 		j1 = j2;
 		if (j1 > k) break;
-		if (js.empty() || js.back() != j1)
+		if (js.back() != j1)
 			js.push_back(j1);
 	}
 
@@ -147,7 +147,6 @@ static void buildJacobsthalOrderDeque(size_t k, std::deque<size_t>& order)
 	for (size_t a = 0; a < js.size(); ++a)
 	{
 		size_t j = js[a];
-		if (j <= last) continue;
 		for (size_t idx = j; idx > last; --idx)
 			order.push_back(idx - 1);
 		last = j;
@@ -167,7 +166,7 @@ static void makePairsVector(const std::vector<int>& in, std::vector< std::pair<i
 		int a = in[i];
 		int b = in[i + 1];
 		if (a < b) pairs.push_back(std::make_pair(a, b));
-		else       pairs.push_back(std::make_pair(b, a));
+		else	pairs.push_back(std::make_pair(b, a));
 	}
 }
 
